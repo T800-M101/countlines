@@ -25,16 +25,18 @@ function help(){
 
 # Function to get the number os lines of files owned by the owner
 function get_lines_by_owner() {
-    # validate if the owner exists
-     if ! id -u $owner >/dev/null 2>&1; then
+      o=$(echo "$owner" | tr '[:upper:]' '[:lower:]')
+
+     # validate if the owner exists
+     if ! id -u $o >/dev/null 2>&1; then
          echo "The owner does not exists!"
      else
-         # counting the number of files owned by the owmer
-         nfiles=$(find . -user $owner -type f | wc -l)
          # Extracting to an array the name of the files owned by the owner
-         files=($(find . -user $owner -type f)) 
+         files=($(find . -maxdepth 1 -user $o -type f))
+         # counting the number of files owned by the owner
+         nfiles=${#files[@]}
 
-         echo -e "\e[1;34mLooking for files where the owner is: $owner\e"
+         echo -e "\e[1;34mLooking for files where the owner is: $o\e"
          echo -e "\e[1;37mFiles found: $nfiles"
          echo
 
@@ -75,7 +77,7 @@ function get_lines_by_month() {
          # Capitalizing month
          m=$(echo "$month_short" | sed 's/.*/\u&/')
          # Counting  number of files by month
-         nfiles=$(find . -type f -ls | grep $m | wc -l)
+         nfiles=$(find . -maxdepth 1 -type f -ls | grep $m | wc -l)
          echo -e "\e[1;34mLooking for files where the month is: $m\e"
          echo -e "\e[1;37mFiles found: $nfiles"
          echo
