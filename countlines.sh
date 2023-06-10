@@ -23,6 +23,30 @@ function help(){
 }
 
 
+# Function to get the number os lines of files owned by the owner
+function get_lines_by_owner() {
+    # validate if the owner exists
+     if ! id -u $owner >/dev/null 2>&1; then
+         echo "The owner does not exists!"
+     else
+         # counting the number of files owned by the owmer
+         nfiles=$(find . -user $owner -type f | wc -l)
+         # Extracting to an array the name of the files owned by the owner
+         files=($(find . -user $owner -type f)) 
+
+         echo -e "\e[1;34mLooking for files where the owner is: $owner\e"
+         echo -e "\e[1;37mFiles found: $nfiles"
+         echo
+
+         for f in "${files[@]}"
+            do
+                nlines=$(wc -l < $f)
+                echo -e "File: ${f:2},  \t Lines: $nlines"
+            done
+      fi
+
+}
+
 
 # ***** SCRIPT INIT ******
     # Validating if there are options
