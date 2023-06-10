@@ -48,6 +48,55 @@ function get_lines_by_owner() {
 }
 
 
+# Function to get the number of lines of files created at specific month
+function get_lines_by_month() {
+     # setting array of month to validate input option
+     months=("jan" "january" "feb" "february" "mar" "march" "apr" "april" "may" "jun" "june" "jul" "july" "aug" "august" "sep" "september" "oct" "october" "nov" "november" "dec" "december")
+     error="The month provided is incorrect!"
+     COUNTER=0
+
+    # looing the array to increment the COUNTER if the input month in found in the array
+    for m in "${months[@]}"
+        do
+            month_lower=$(echo "$month" | tr '[:upper:]' '[:lower:]')
+            if [[ $m = $month_lower ]]
+                 then
+                    COUNTER=$((COUNTER + 1))
+            fi
+        done
+
+    # If the COUNTER is grater than 0 we excute  code
+   if [[ $COUNTER -gt 0 ]]
+     then
+         # Extracting 3 first chars from month
+         month_short=${month:(0):(3)}
+         # Lowering month
+         month_short=$(echo "$month_short" | sed -e 's/\(.*\)/\L\1/')
+         # Capitalizing month
+         m=$(echo "$month_short" | sed 's/.*/\u&/')
+         # Counting  number of files by month
+         nfiles=$(find . -type f -ls | grep $m | wc -l)
+         echo -e "\e[1;34mLooking for files where the month is: $m\e"
+         echo -e "\e[1;37mFiles found: $nfiles"
+         echo
+         # Traversing glob to filter files by month
+         for f in *;
+             do 
+                # Getting nuber of lines by file
+                nlines=$(wc -l < $f)
+                # Getting creation time of each file
+                ctime=$(ls --time=ctime -l $f)
+                # Filtering month
+                if [[ $ctime == *$m* ]];
+                    then
+                        echo -e "File: $f,   \t Lines: $nlines"
+                fi
+            done
+   else
+         echo "$error"
+   fi
+}
+
 # ***** SCRIPT INIT ******
     # Validating if there are options
     if [[ $# -gt 0 ]]
