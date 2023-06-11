@@ -1,29 +1,24 @@
 #!/bin/bash
 
-# This bash script counts the number of lines in a directory passing as argument the owner of the directory or the month when the files where created.
+# This bash script counts the number of lines in files in the current directory. It should be provided one of the two possible options. The owner of the files or the month when the files where created.
 
 
 # Function to provide help on how to use the script
 function help(){
      echo -e  "\e[1;31m***** THIS SMALL HELP WILL SHOW YOU HOW TO USE THE countlines.sh BASH SCRIPT *****\e"
-     echo -e "\e[0;37m'countlines.sh' bash script will count the number of lines of a file that belongs to an owner or the number of lines of a file created at any specific month.\e"
+     echo -e "\e[0;37m'countlines.sh' bash script will count the number of lines in files that belongs to an owner or the number of lines in files created in a specific month.\e"
      echo
-     echo -e "\e[1;32mTo count the number of lines of files owned by a specific onwer, use  the owner option:\e"
-     echo -e "\e[0;37m./countlines.sh -o"
-     echo -e "./countlines.sh --owner\e"
+     echo -e "\e[1;32mTo count the number of lines in files owned by a specific owner, use the owner option:\e"
+     echo -e "\e[0;37m./countlines.sh -o [owner name] or ./countlines.sh --owner [owner name]\e"
      echo
-     echo -e "\e[1;32mTo count the number of lines of files created at an specific month, use the month option\e"
-     echo -e "\e[0;37m./countlines.sh -m"
-     echo "./countlines.sh -month\e"
+     echo -e "\e[1;32mTo count the number of lines in files created in a specific month, use the month option:\e"
+     echo -e "\e[0;37m./countlines.sh -m [month name] or ./countlines.sh --month [month name]"
      echo
-     echo "-o or --owner is the owner of the files and is optional."
-     echo "-m or --month is the month in which the files were created and is optioan"
-     echo
-     echo "*** If you have more questions you can google it :)*** "
+     echo "***** If you have more questions you can google it. (I'm kidding!) :) *****\e "
 }
 
 
-# Function to get the number os lines of files owned by the owner
+# Function to get the number of lines in files owned by the owner
 function get_lines_by_owner() {
       o=$(echo "$owner" | tr '[:upper:]' '[:lower:]')
 
@@ -50,14 +45,14 @@ function get_lines_by_owner() {
 }
 
 
-# Function to get the number of lines of files created at specific month
+# Function to get the number of lines in files created in a specific month
 function get_lines_by_month() {
      # setting array of month to validate input option
      months=("jan" "january" "feb" "february" "mar" "march" "apr" "april" "may" "jun" "june" "jul" "july" "aug" "august" "sep" "september" "oct" "october" "nov" "november" "dec" "december")
      error="The month provided is incorrect!"
      COUNTER=0
 
-    # looing the array to increment the COUNTER if the input month in found in the array
+    # Looing the array to increment the COUNTER if the input month in found in the array
     for m in "${months[@]}"
         do
             month_lower=$(echo "$month" | tr '[:upper:]' '[:lower:]')
